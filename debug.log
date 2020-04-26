@@ -1,0 +1,10 @@
+[0405/143304.642:ERROR:process_reader_win.cc(123)] NtOpenThread: {Acesso Negado} Um processo solicitou acesso a um objeto, mas o direito de acesso não lhe foi concedido. (0xc0000022)
+[0405/143304.707:ERROR:exception_snapshot_win.cc(98)] thread ID 1884 not found in process
+[0405/143304.812:ERROR:process_reader_win.cc(123)] NtOpenThread: {Acesso Negado} Um processo solicitou acesso a um objeto, mas o direito de acesso não lhe foi concedido. (0xc0000022)
+[0405/143304.812:ERROR:exception_snapshot_win.cc(98)] thread ID 10044 not found in process
+[0405/143304.859:ERROR:process_info.cc(329)] VirtualQueryEx: Acesso negado. (0x5)
+[0405/143304.860:ERROR:process_info.cc(556)] ReadMemoryInfo failed
+[0405/143304.860:ERROR:process_memory_win.cc(39)] Failed to initialize ProcessInfo.
+[0405/143304.860:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: Tentou-se acessar um processo de saída. (0xc000010a)
+[0405/143304.899:ERROR:process_reader_win.cc(123)] NtOpenThread: {Acesso Negado} Um processo solicitou acesso a um objeto, mas o direito de acesso não lhe foi concedido. (0xc0000022)
+[0405/143304.899:ERROR:exception_snapshot_win.cc(98)] thread ID 13872 not found in process
