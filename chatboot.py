@@ -1,8 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import time
+import time, re
 
-grupos = 'Chatboot '
+grupos = 'Chatbot'
+#grupos = 'Projeto chatbot '
 
 class WhatsappBot:
     def __init__(self):
@@ -92,13 +93,16 @@ if __name__ == "__main__":
     
     while True:
         mensagem = WhatsappBot.obterUltimaMensagem()
-        mensagem = mensagem[1].split("+")
+        mensagem[1] = mensagem[1].lower()
+        matches = re.findall('#debora', mensagem[1])
 
-        if mensagem[0] == "#Debora":
+        if matches:
+            conversa = re.split(r'#debora', mensagem[1])
+
             WhatsappBot.mudarAbaDialogFlow()
             time.sleep(2)
             
-            WhatsappBot.digitarMensagemDialogFlow(mensagem[1])
+            WhatsappBot.digitarMensagemDialogFlow(conversa[1])
             time.sleep(2)
             
             mensagemRobo = WhatsappBot.obterRespostaDialogFlow()
@@ -107,12 +111,3 @@ if __name__ == "__main__":
             
             WhatsappBot.enviarMensagem("Debora: "+ mensagemRobo)
             time.sleep(4)
-        
-
-
-    
-    
-    
-
-
-
