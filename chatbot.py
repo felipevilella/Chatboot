@@ -25,8 +25,13 @@ class WhatsappBot:
         mensage_caixa = self.driver.find_element_by_xpath('//div[@class="_1Plpp"]')
         mensage_caixa.send_keys(mensagem)
 
-        enviar = self.driver.find_element_by_xpath('//button[@class="_35EW6"]')
-        enviar.click()
+        time.sleep(4)
+        try:
+            enviar = self.driver.find_element_by_xpath('//button[@class="_35EW6"]')
+            enviar.click()
+        except NoSuchElementException:
+            pass
+            
 
     def enviarGif(self, nomeGif) :
         abaconteudos = self.driver.find_elements_by_xpath('//div[@class="weEq5"]')
@@ -43,7 +48,7 @@ class WhatsappBot:
         
         abaGif = self.driver.find_elements_by_xpath('//div[@class="zl5TR"]')
         abaGif[randrange(1, 4)].click()
-        time.sleep(2)
+        time.sleep(8)
 
         enviar = self.driver.find_element_by_xpath('//div[@class="_3nfoJ"]')
         enviar.click()
@@ -67,7 +72,7 @@ class WhatsappBot:
 
             return ['success', nome, mensagem] 
         except NoSuchElementException:
-            return ['alert', nome, 'Infelizmente, não consigo identificar o tipo de mensagem que você me enviou.']
+            return ['alert', '', 'Infelizmente, não consigo identificar o tipo de mensagem que você me enviou.']
 
     def abrirAba(self):
         self.driver.execute_script("window.open('https://accounts.google.com/signin/oauth/oauthchooseaccount?state=%7B%22csrf_token%22%3A%20%22628b041b6c99b29d0846867ba5626ce3863a25ae29c72b1c7a3c5a38ac478506%22%2C%20%22return_url%22%3A%20%22https%3A%2F%2Fdialogflow.com%2F%22%7D&redirect_uri=https%3A%2F%2Fdialogflow.com%2Foauth2callback&prompt=select_account&response_type=code&client_id=157101835696-ooapojlodmuabs2do2vuhhnf90bccmoi.apps.googleusercontent.com&scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgoogledevelopers%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&access_type=online&o2v=2&as=GtbyJPnOlpf5qDIzhPFf8Q&flowName=GeneralOAuthFlow', '_blank')")
@@ -95,8 +100,23 @@ class WhatsappBot:
         campoMensagem.send_keys(Keys.ENTER)
     
     def obterRespostaDialogFlow(self):
-        resposta = self.driver.find_elements_by_xpath('//span[@class="ng-binding"]')
-        return resposta[2].text
+        respostas = self.driver.find_elements_by_xpath('//span[@class="ng-binding"]')
+        respostaDialogFlow = []
+        contador = 0
+
+        for resposta in respostas:
+            if resposta.text == "input.welcome":
+                break
+            if resposta.text == "Intents":
+                break
+            if resposta.text == "input.unknown":
+                break
+            if contador > 1 :
+                respostaDialogFlow.append(resposta.text)
+            
+            contador = contador + 1
+
+        return respostaDialogFlow
 
     def mudarAbaWhatssap(self):
          self.driver.switch_to_window(self.driver.window_handles[0])
@@ -110,7 +130,7 @@ if __name__ == "__main__":
     # ABRIR WhatsApp 
     WhatsappBot = WhatsappBot()
     time.sleep(10)
-    alunos = ['Wesley', "Rayane", "Kamila"]
+    alunos = ["Felipe Vilella"]
      
     #Abrir dialogFlow
     WhatsappBot.abrirAba()
@@ -159,16 +179,18 @@ if __name__ == "__main__":
                     WhatsappBot.digitarMensagemDialogFlow(mensagem[2])
                     time.sleep(2)
                     
-                    mensagemRobo = WhatsappBot.obterRespostaDialogFlow()
+                    mensagensRobo = WhatsappBot.obterRespostaDialogFlow()
                     WhatsappBot.mudarAbaWhatssap()
                     time.sleep(2)
-
-                    if re.findall('enviar-gif-ok', mensagem[2]):
-                        WhatsappBot.enviarGif(mensagemRobo)
-                    else:
-                        WhatsappBot.enviarMensagem("Debora: "+ mensagemRobo)
-                
+ 
+                    for mensagemRobo in mensagensRobo :  
+                        if re.findall('enviar-gif-ok', mensagem[2]):
+                            WhatsappBot.enviarGif(mensagemRobo)
+                        else:
+                            WhatsappBot.enviarMensagem(mensagemRobo)
+                        time.sleep(1)
+                    
                 else:
-                    WhatsappBot.enviarMensagem("Debora: "+ mensagem[2])
-                
+                    WhatsappBot.enviarMensagem(mensagem[2])
+
                 time.sleep(4)
