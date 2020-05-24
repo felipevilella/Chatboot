@@ -115,14 +115,21 @@ class WhatsappBot:
                 respostaDialogFlow.append(resposta.text)
             
             contador = contador + 1
-
+        print(respostaDialogFlow)
         return respostaDialogFlow
 
     def mudarAbaWhatssap(self):
-         self.driver.switch_to_window(self.driver.window_handles[0])
+        self.driver.switch_to_window(self.driver.window_handles[0])
     
     def mudarAbaDialogFlow(self):
-         self.driver.switch_to_window(self.driver.window_handles[1])
+        self.driver.switch_to_window(self.driver.window_handles[1])
+        try:
+            entrarDialogFlow = self.driver.find_element_by_class_name("md-btn-login-text-wrapper")
+            entrarDialogFlow.click()
+            time.sleep(2)
+        except NoSuchElementException:
+            pass
+
 
 
 
@@ -130,7 +137,7 @@ if __name__ == "__main__":
     # ABRIR WhatsApp 
     WhatsappBot = WhatsappBot()
     time.sleep(10)
-    alunos = ["Felipe Vilella", "Kamila", "Rayane", "Wesley", "Andre", "Yuri"]
+    alunos = ["Felipe Vilella"]
      
     #Abrir dialogFlow
     WhatsappBot.abrirAba()
