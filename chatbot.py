@@ -31,7 +31,6 @@ class WhatsappBot:
             enviar.click()
         except NoSuchElementException:
             pass
-            
 
     def enviarGif(self, nomeGif) :
         abaconteudos = self.driver.find_elements_by_xpath('//div[@class="weEq5"]')
@@ -52,7 +51,6 @@ class WhatsappBot:
 
         enviar = self.driver.find_element_by_xpath('//div[@class="_3nfoJ"]')
         enviar.click()
-        
     
     def obterUltimaMensagem(self):
         # Conteudo mensagem 
@@ -62,17 +60,14 @@ class WhatsappBot:
         if mensagens:
             try:
                 mensagem = mensagens[ultimaMensagem].find_element_by_css_selector('span.selectable-text').text
-
                 # Rementente
                 Rementente_mensagem = self.driver.find_elements_by_xpath('//div[@class="copyable-text"]')
                 ultimoRemetente = len(Rementente_mensagem) -1 
-                
                 rementente = Rementente_mensagem[ultimoRemetente].get_attribute('data-pre-plain-text')
                 nome = re.findall(r"[a-zA-Z]", rementente)
-
                 return ['success', nome, mensagem] 
             except NoSuchElementException:
-                return ['alert', '', 'Infelizmente, não consigo identificar o tipo de mensagem que você me enviou.']
+                return ['alert', '', 'Infelizmente ainda não consigo entender o tipo de mensagem que você me enviou.']
 
     def abrirAba(self):
         self.driver.execute_script("window.open('https://accounts.google.com/signin/oauth/oauthchooseaccount?state=%7B%22csrf_token%22%3A%20%22628b041b6c99b29d0846867ba5626ce3863a25ae29c72b1c7a3c5a38ac478506%22%2C%20%22return_url%22%3A%20%22https%3A%2F%2Fdialogflow.com%2F%22%7D&redirect_uri=https%3A%2F%2Fdialogflow.com%2Foauth2callback&prompt=select_account&response_type=code&client_id=157101835696-ooapojlodmuabs2do2vuhhnf90bccmoi.apps.googleusercontent.com&scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgoogledevelopers%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&access_type=online&o2v=2&as=GtbyJPnOlpf5qDIzhPFf8Q&flowName=GeneralOAuthFlow', '_blank')")
@@ -87,10 +82,9 @@ class WhatsappBot:
         time.sleep(10)
 
         senha = self.driver.find_element_by_name("password")
-        senha.send_keys("caneta!1")        
+        senha.send_keys("caneta!1")
         botaoSenha = self.driver.find_element_by_id("passwordNext")
         botaoSenha.click()
-
         time.sleep(10)
         self.driver.get("https://dialogflow.cloud.google.com/")
     
@@ -148,8 +142,6 @@ if __name__ == "__main__":
         for aluno in alunos:
             WhatsappBot.pesquisarNome(aluno)
             time.sleep(3)
-
-            mensagem = WhatsappBot.obterUltimaMensagem()
 
             # Formatar nome aluno em array
             nomeAluno = re.findall(r"[a-zA-Z]", aluno)
