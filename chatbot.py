@@ -2,6 +2,10 @@ from selenium import webdriver
 from random import randrange
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
+from quiz import quiz
+from unidecode import unidecode
+
+
 import time, re
 
 class WhatsappBot:
@@ -13,21 +17,21 @@ class WhatsappBot:
         time.sleep(15)
 
     def pesquisarNome(self, nome):
-        novaConversa = self.driver.find_elements_by_xpath('//div[@class="rAUz7"]')
+        novaConversa = self.driver.find_elements_by_xpath('//div[@class="PVMjB"]')
         novaConversa[1].click()
-        participante = self.driver.find_element_by_class_name('_2S1VP')
+        participante = self.driver.find_element_by_class_name('_3FRCZ')
         participante.send_keys(nome)
         time.sleep(2)
         user = self.driver.find_element_by_xpath('//span[@title="{}"]'.format(nome))
         user.click()
     
     def enviarMensagem(self, mensagem):  
-        mensage_caixa = self.driver.find_element_by_xpath('//div[@class="_1Plpp"]')
+        mensage_caixa = self.driver.find_element_by_xpath('//div[@class="_3uMse"]')
         mensage_caixa.send_keys(mensagem)
 
         time.sleep(4)
         try:
-            enviar = self.driver.find_element_by_xpath('//button[@class="_35EW6"]')
+            enviar = self.driver.find_element_by_xpath('//button[@class="_1U1xa"]')
             enviar.click()
         except NoSuchElementException:
             pass
@@ -54,7 +58,7 @@ class WhatsappBot:
     
     def obterUltimaMensagem(self):
         # Conteudo mensagem 
-        mensagens = self.driver.find_elements_by_class_name("_3_7SH")
+        mensagens = self.driver.find_elements_by_class_name("_274yw")
         ultimaMensagem = len(mensagens) - 1
 
         if mensagens:
@@ -124,15 +128,19 @@ class WhatsappBot:
             pass
 
 if __name__ == "__main__":
+    quiz = quiz()
+
     # ABRIR WhatsApp 
     WhatsappBot = WhatsappBot()
     time.sleep(10)
-    alunos = ["Robô Débora"]
+    alunos = ["Felipe Vilella"]
      
     #Abrir dialogFlow
     WhatsappBot.abrirAba()
     WhatsappBot.loginDialogFlow()
     time.sleep(10)
+
+    
 
     WhatsappBot.mudarAbaWhatssap()
     time.sleep(3)
@@ -154,32 +162,79 @@ if __name__ == "__main__":
                         destinatario = False
 
                 if(destinatario):
-
+                    
                     if mensagem[0] == 'success':
                         mensagem[2] = mensagem[2].lower()
-                        # Verificar Quiz
-                        quiz = re.findall('#quiz', mensagem[2])
+                        
+                        # Verificar se o aluno respondeu todas as questões
+                        liberarConversa = True                    
+                        if mensagem[2] == "#topronto" or mensagem[2] == "#pergunta2" or mensagem[2] == "#pergunta3":
+                            
+                            quiz.adicionarAluno(aluno)
+                            questionario = quiz.verificaQuestionarioRespondido(aluno)
+
+                            if questionario[0] == "alert":
+                                if questionario[1] == "#pergunta1" and "#topronto" != mensagem[2]:
+                                    WhatsappBot.enviarMensagem(questionario[2]) 
+                                    liberarConversa = False
+                                
+                                if questionario[1] == "#pergunta2" and questionario[1] != mensagem[2]:
+                                    WhatsappBot.enviarMensagem(questionario[2]) 
+                                    liberarConversa = False
+                                
+                                if questionario[1] == "#pergunta3" and questionario[1] != mensagem[2]:
+                                    WhatsappBot.enviarMensagem(questionario[2])
+                                    liberarConversa = False
+                            
+                            elif questionario[0] == "success":
+                                WhatsappBot.enviarMensagem(questionario[1])
+                                liberarConversa = False
+
                         # Gerar Relatorio
-                        relatorio = re.findall('#gerarRelatorio', mensagem[2])
-                        
-                        WhatsappBot.mudarAbaDialogFlow()
-                        time.sleep(2)
-                        
-                        WhatsappBot.digitarMensagemDialogFlow(mensagem[2])
-                        time.sleep(2)
-                        
-                        mensagensRobo = WhatsappBot.obterRespostaDialogFlow()
-                        WhatsappBot.mudarAbaWhatssap()
-                        time.sleep(2)
-    
-                        for mensagemRobo in mensagensRobo :  
-                            if re.findall('enviar-gif-ok', mensagem[2]):
-                                WhatsappBot.enviarGif(mensagemRobo)
-                            else:
-                                WhatsappBot.enviarMensagem(mensagemRobo)
-                            time.sleep(1)
-                        
+                        relatorio = re.findall('#relatorio', unidecode(mensagem[2]))
+
+                        if relatorio:
+                            mensagemRelatorio = quiz.gerarRelatorio(aluno)
+                            
+                            for mensagem in mensagemRelatorio :  
+                                WhatsappBot.enviarMensagem(mensagem)
+                                time.sleep(1)
+                            
+                            liberarConversa = False
+
+                        if liberarConversa:                          
+                            # Analisar pergunta de quiz
+                            quiz.analisarPerguntaResposta(mensagem[2], aluno)
+                            
+                            WhatsappBot.mudarAbaDialogFlow()
+                            time.sleep(2)
+                            
+                            WhatsappBot.digitarMensagemDialogFlow(mensagem[2])
+                            time.sleep(2)
+                            
+                            mensagensRobo = WhatsappBot.obterRespostaDialogFlow()
+                            WhatsappBot.mudarAbaWhatssap()
+                            time.sleep(2)
+        
+                            for mensagemRobo in mensagensRobo :  
+                                if re.findall('enviar-gif-ok', mensagem[2]):
+                                    WhatsappBot.enviarGif(mensagemRobo)
+                                else:
+                                    WhatsappBot.enviarMensagem(mensagemRobo)
+
+                                    # verifica se o aluno completou o questionario e retorna o resultado final
+                                    finalQuestionario = re.findall("até a próxima aula", mensagemRobo)
+                                                                       
+                                    if finalQuestionario:
+                                        mensagens = quiz.relatorioAluno(aluno, 3)
+                                        
+                                        for mensagem in mensagens:
+                                            WhatsappBot.enviarMensagem(mensagem)
+                                            time.sleep(1)
+
+                                time.sleep(1)
+                            
                     else:
                         WhatsappBot.enviarMensagem(mensagem[2])
 
-                    time.sleep(4)
+            time.sleep(4)
