@@ -18,7 +18,7 @@ class quiz:
 
         for num in perguntas:
             tipo1 = re.findall(str(num) +'\)', resposta)
-            tipo2 = re.findall(str(num), resposta)
+            tipo2 = re.findall(str(num)+ ' ', resposta)
             tipo3 = re.findall(str(num) +"-", resposta)
                 
             if tipo1 or tipo2  or tipo3:
@@ -158,14 +158,14 @@ class quiz:
 
                     quantidade = quantidade + 1
    
-            if int(quantAcerto) == int(totalQuestao):
-                mensagem.append("Parabéns , você acertou " + str(quantAcerto) + " das "+ str(totalQuestao) +" das questões")
-            elif int(quantAcerto) == int(totalQuestao) - 1:
-                mensagem.append("Você foi bem, acertou " + str(quantAcerto) + " das "+ str(totalQuestao) + " das questões, mas o importante e sempre estudar para conseguir melhorar ainda mais ;-)")
-            else:
-                mensagem.append("Que pena, você acertou "+ str(quantAcerto) + " das "+ str(totalQuestao) + " das questões, mas sabia que para ter sucesso é falhar repetidamente, mas sem perder o entusiasmo.  ;-)")
-            
-            return mensagem    
+                if int(quantAcerto) == int(totalQuestao):
+                    mensagem.append("Parabéns , você acertou " + str(quantAcerto) + " das "+ str(totalQuestao) +" das questões")
+                elif int(quantAcerto) == int(totalQuestao) - 1:
+                    mensagem.append("Você foi bem, acertou " + str(quantAcerto) + " das "+ str(totalQuestao) + " das questões, mas o importante e sempre estudar para conseguir melhorar ainda mais ;-)")
+                else:
+                    mensagem.append("Que pena, você acertou "+ str(quantAcerto) + " das "+ str(totalQuestao) + " das questões, mas sabia que para ter sucesso é falhar repetidamente, mas sem perder o entusiasmo.  ;-)")
+                
+                return mensagem    
 
         return False
 

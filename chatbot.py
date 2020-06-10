@@ -133,7 +133,7 @@ if __name__ == "__main__":
     # ABRIR WhatsApp 
     WhatsappBot = WhatsappBot()
     time.sleep(10)
-    alunos = ["Felipe Vilella"]
+    alunos = ["Rayane", "Felipe Vilella"]
      
     #Abrir dialogFlow
     WhatsappBot.abrirAba()
