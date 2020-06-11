@@ -134,7 +134,7 @@ class quiz:
                 elif alunos[key]['pergunta_3'] == "Não realizado":
                     return ['alert',"#pergunta3", nome+", vi aqui e você parou na pergunta 3, bora continuar ;-) ? me envie *#pergunta3*"]
                 else:
-                    return ['success', nome+", você já completou o questionario :-) , no momento só posso tirar dúvidas"]
+                    return ['success', nome+", você já completou o questionario :-) , me envie *iniciar aula* para poder repetir o conteudo para você"]
 
     
 
