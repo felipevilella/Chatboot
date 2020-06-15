@@ -134,7 +134,7 @@ class quiz:
                 elif alunos[key]['pergunta_3'] == "Não realizado":
                     return ['alert',"#pergunta3", nome+", vi aqui e você parou na pergunta 3, bora continuar ;-) ? me envie *#pergunta3*"]
                 else:
-                    return ['success', nome+", você já completou o questionario :-) , me envie *iniciar aula* para poder repetir o conteudo para você"]
+                    return ['success', nome+", você já completou o questionário :-) , Se você quiser ver o conteúdo de novo, me manda *#iniciaraula*"]
 
     
 
@@ -159,11 +159,11 @@ class quiz:
                     quantidade = quantidade + 1
    
                 if int(quantAcerto) == int(totalQuestao):
-                    mensagem.append("Parabéns , você acertou " + str(quantAcerto) + " das "+ str(totalQuestao) +" das questões")
+                    mensagem.append("Você mandou muito bem, você acertou " + str(quantAcerto) + " das "+ str(totalQuestao) +" questões, parabéns!!!")
                 elif int(quantAcerto) == int(totalQuestao) - 1:
-                    mensagem.append("Você foi bem, acertou " + str(quantAcerto) + " das "+ str(totalQuestao) + " das questões, mas o importante e sempre estudar para conseguir melhorar ainda mais ;-)")
+                    mensagem.append("Você foi bem, acertou " + str(quantAcerto) + " das "+ str(totalQuestao) + " questões, mas o importante é sempre estudar para conseguir melhorar ainda mais ;-)")
                 else:
-                    mensagem.append("Que pena, você acertou "+ str(quantAcerto) + " das "+ str(totalQuestao) + " das questões, mas sabia que para ter sucesso é falhar repetidamente, mas sem perder o entusiasmo.  ;-)")
+                    mensagem.append("Que pena, você acertou "+ str(quantAcerto) + " das "+ str(totalQuestao) + " questões, mas não esquenta, errar faz parte. O importante é continuar estudando! ;-)")
                 
                 return mensagem    
 

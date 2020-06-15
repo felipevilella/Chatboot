@@ -223,9 +223,11 @@ if __name__ == "__main__":
                                     WhatsappBot.enviarMensagem(mensagemRobo)
 
                                     # verifica se o aluno completou o questionario e retorna o resultado final
-                                    finalQuestionario = re.findall("negadas por aspectos discriminatórios.", mensagemRobo)
+                                    finalQuestionario1 = re.findall("Finalizamos as perguntas, você mandou bem!!", mensagemRobo)
+                                    finalQuestionario2 = re.findall("Bora ver como você se saiu...", mensagemRobo)
+                                    finalQuestionario3 = re.findall("bora ver qual foi seu resultado", mensagemRobo)
                                                                        
-                                    if finalQuestionario:
+                                    if finalQuestionario1 or finalQuestionario2 or finalQuestionario3 :
                                         mensagens = quiz.relatorioAluno(aluno, 3)
                                         
                                         for mensagem in mensagens:
